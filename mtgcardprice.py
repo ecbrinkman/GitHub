@@ -3,14 +3,25 @@ import requests
 
 API = "https://api.deckbrew.com/mtg/"
 
-cardname = raw_input("Enter Card Name: ")
+def cardinput():
+   cardname = raw_input("Enter Card Name: ")
+   print ("You wrote: " + cardname)
+   cardname = cardname.replace(" ","-")
+   cardname = cardname.replace(",","")
+   cardname = cardname.lower()
+   print ("You wrote: " + cardname)
+   return cardname
 
-print ("You wrote: " + cardname)
-cardname = cardname.replace(" ","-")
-cardname = cardname.replace(",","")
-cardname = cardname.lower()
-print ("You wrote: " + cardname)
-r = requests.get(API+"cards/"+cardname)
+def getcardjson(card):
+   card = requests.get(API+"cards/"+card)
+   if card.status_code == 200:   
+      return card
+   else:
+      print "ERROR!"
+
+   
+cardname = cardinput()
+r = getcardjson(cardname)
 print r.status_code
 price = r.json()["editions"][0]["price"]["median"]
 
